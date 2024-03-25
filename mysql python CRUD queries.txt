@@ -1,0 +1,245 @@
+show DATABASES
+
+
+use sql6684551
+
+show TABLES
+
+create table customers(
+    id integer auto_increment not null,
+    first_name VARCHAR(19) not null,
+    last_name VARCHAR(19) not null,
+    DOB Date,
+    primary key (id)
+)
+
+select * from customers
+
+
+insert into customers(first_name,last_name,DOB) VALUES
+('John', 'Doe', '1990-05-15'),
+('Jane', 'Smith', '1985-08-22'),
+('Michael', 'Johnson', '1978-12-10'),
+('Emily', 'Brown', '1995-03-28'),
+('David', 'Williams', '1982-06-17'),
+('Sarah', 'Miller', '1993-09-20'),
+('Matthew', 'Davis', '1974-11-05'),
+('Olivia', 'Wilson', '1988-02-14'),
+('James', 'Taylor', '1970-07-31'),
+('Sophia', 'Anderson', '1987-04-25')
+
+alter table customers add email VARCHAR(20)
+
+alter table customers add city VARCHAR(10)
+
+
+update customers set email="Deepakalur4@gmail.com";
+update customers set city="lakshmeshwar"
+
+update customers set email="jyoht20303@gail.com" where id between 1 and 3
+
+update customers set city=case when id=1 then "hebbal"
+                               when id=2 then "kengeri"
+                               when id not in (1,2) then "lakshmeshwar"
+                               END
+
+select * from customers
+
+alter Table customers MODIFY DOB date not null
+
+select * from customers
+
+desc customers
+
+
+drop table customers
+
+
+create table person(
+        id INTEGER auto_increment,
+        first_name VARCHAR(20),
+        last_name VARCHAR(20),
+        DOB VARCHAR(20),
+        constraint pk_person primary key(id),
+        unique(first_name)
+)
+
+
+insert into person(first_name,last_name,DOB) VALUES
+('Matthew', 'Davis', '1974-11-05'),
+('Olivia', 'Wilson', '1988-02-14'),
+('James', 'Taylor', '1970-07-31'),
+('Sophia', 'Anderson', '1987-04-25')
+
+
+create table guy(
+        id INTEGER auto_increment,
+        first_name VARCHAR(20),
+        last_name VARCHAR(20),
+        DOB VARCHAR(20),
+        primary key(id),
+        unique(first_name)
+)
+
+create table department(
+        id INTEGER auto_increment,
+        department_id int,
+        first_name VARCHAR(20),
+        last_name VARCHAR(20),
+        DOB VARCHAR(20),
+        constraint pk_department primary key(department_id),
+        constraint fk_department FOREIGN key(id) REFERENCES guy(id),
+        unique(first_name)
+)
+
+
+desc department
+
+
+alter table guy add unique(last_name)
+
+DROP table guy
+
+
+drop table customers
+
+
+drop table department
+
+drop table guy
+
+
+drop table person
+
+
+create table customers(
+    id integer auto_increment not null,
+    first_name VARCHAR(19) not null,
+    last_name VARCHAR(19) not null,
+    DOB Date,
+    constraint pk_primary_key  primary key (id)
+)
+
+insert into customers(first_name,last_name,DOB) VALUES
+('John', 'Doe', '1990-05-15'),
+('Jane', 'Smith', '1985-08-22'),
+('Michael', 'Johnson', '1978-12-10'),
+('Emily', 'Brown', '1995-03-28'),
+('David', 'Williams', '1982-06-17'),
+('Sarah', 'Miller', '1993-09-20'),
+('Matthew', 'Davis', '1974-11-05'),
+('Olivia', 'Wilson', '1988-02-14'),
+('James', 'Taylor', '1970-07-31'),
+('Sophia', 'Anderson', '1987-04-25')
+
+
+select * from customers
+
+
+create table orders(
+    customer_id integer auto_increment not null,
+    order_id int, 
+    first_name VARCHAR(19) not null,
+    last_name VARCHAR(19) not null,
+    DOB Date,
+    constraint pk_primary_key  primary key (order_id),
+    constraint fk_foreign_key FOREIGN key(customer_id) references customers(id)
+)
+
+
+desc orders
+
+create table sales(
+    customer_id integer auto_increment not null,
+    order_id int, 
+    first_name VARCHAR(19) not null,
+    last_name VARCHAR(19) not null,
+    DOB Date,
+    salary int,
+    constraint pk_primary_key  primary key (customer_id),
+    check(salary<500)
+)
+
+
+insert into sales(first_name,last_name,DOB,salary) VALUES
+("deepu","alur","1990/20/23",1)
+
+
+select * from sales
+
+
+
+
+create table location(
+    customer_id integer auto_increment not null,
+    order_id int, 
+    first_name VARCHAR(19) not null,
+    last_name VARCHAR(19) not null,
+    city VARCHAR(20) DEFAULT "bangalorew",
+    PRIMARY key(customer_id)
+)
+
+select * from location
+
+
+create index index_name_city on location(city)
+
+
+alter table location 
+drop index index_name_city
+
+
+
+#views
+
+create table student(
+    id integer not null AUTO_INCREMENT,
+    first_name VARCHAR(20),
+    last_name VARCHAR(20),
+    age int,
+    constraint pk_student PRIMARY key(id)
+)
+
+insert into student(first_name,last_name,age) values ("Deepu","alur",40)
+
+create table department(
+    student_id integer not null AUTO_INCREMENT,
+    department_name VARCHAR(20),
+    constraint fk_department FOREIGN key(student_id) REFERENCES student(id)
+)
+
+insert into department(student_id,department_name) values (3,"Deepakalu")
+
+
+create view Deewpak as
+select A.*,b.* from student A
+left join department b on A.id=b.student_id
+
+
+
+select * from Deewpak
+
+
+#stored_procedure
+
+DELIMITER $$
+create Procedure 2nd_prec(in id int)
+begin
+    select * from student where student.id=id;
+end$$
+
+DELIMITER;
+
+call 2nd_prec(3)
+
+DELIMITER $$
+create Procedure 4_prec(out records int)
+begin
+    select count(*) into records from student;
+end$$
+
+DELIMITER;
+
+call 3_prec(@records)
+
+select @record as toatl_rec
