@@ -1,0 +1,93 @@
+create Table students(
+    student_id int not null,
+    studnet_name VARCHAR(10),
+    city VARCHAR(10),
+    DOB date,
+    constraint student_pk PRIMARY KEY (student_id),
+    constraint student_uk UNIQUE (studnet_name)
+)
+
+
+INSERT into students(student_id,studnet_name,city,DOB) VALUES(4,'akka','hubli','1993-05-10')
+
+
+create table department(
+    dept_id INT not null,
+    student_id int not null,
+    dept_name VARCHAR(20),
+    constraint department_pk PRIMARY key (dept_id),
+    constraint department_fk FOREIGN key (student_id) REFERENCES students(student_id)
+)
+
+
+alter table department RENAME column student_id to std_id;
+
+INSERT into department(dept_id,student_id,dept_name) values (500,1,'bull')
+
+
+
+select * from department
+
+
+delete from department where dept_id=500
+
+alter table department add constraint unieq_dp UNIQUE(dept_name)
+
+
+
+create VIEW Deepu as 
+select A.*,B.* from students A
+left JOIN department B on A.student_id=B.std_id
+
+DELIMITER$$
+
+create Procedure my_proc()
+begin
+select count(*) from students;
+end $$
+
+
+
+
+create PROCEDURE 2nd_one()
+begin
+select max(std_id) from department;
+end --
+
+DELIMITER;
+
+create PROCEDURE 3rd_one(id int)
+begin
+select * from department where std_id=id;
+end --
+
+
+call 3rd_one(2)
+
+
+drop PROCEDURE 3rd_one
+
+
+
+create Function dee_var_name(name VARCHAR(20))
+RETURNS VARCHAR(50) DETERMINISTIC 
+begin
+return CONCAT(name,' ','concated_vales');
+end
+
+
+select department.*,dep_var_name(dept_name) as a from department
+
+
+create FUNCTION ranker(id int)
+returns VARCHAR(20) DETERMINISTIC
+begin
+DECLARE deepu VARCHAR(20);
+if id<200 then set deepu='below 200';
+else set deepu= 'greater than 200';
+end if ;
+return deepu;
+end;
+
+
+select department.*,ranker(dept_id) as a from department
