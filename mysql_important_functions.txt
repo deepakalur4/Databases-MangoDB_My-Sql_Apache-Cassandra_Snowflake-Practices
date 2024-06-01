@@ -1,0 +1,15 @@
+select mine.*,rank() over (order by sales_number) as nim
+,dense_rank() over (order by sales_number) as nimmm
+,ROW_NUMBER() over (order by sales_number) as ro
+,sum(sales_number) over (order by sales_number) as sss
+,avg(sales_number) over (order by sales_number) as avg
+,sum(sales_number) over (order by sales_number rows BETWEEN 1 PRECEDING and 0 FOLLOWING ) as n
+,FIRST_VALUE(sales_number) over (order by cust_id) as first_value_b
+,LAST_VALUE(sales_number) over (order by cust_id rows BETWEEN UNBOUNDED PRECEDING and UNBOUNDED FOLLOWING ) as first_value_b
+,lead(place) over (order by place) as lgg
+,lag(place) over (order by place) as lessa
+,NTH_VALUE(sales_number,2) over (order by sales_number) as nnn
+,case when cust_id<9 then cust_id+1 else 'deepkas' end as 'case strate'
+,COALESCE(NULL,14,15)
+,isnull(null)
+from mine
